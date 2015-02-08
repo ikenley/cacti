@@ -21,6 +21,12 @@ block content
   //- Main jumbotron for a primary marketing message or call to action
   div.jumbotron
     div.container
-      h1 Hello, world!
-      p This is a template for a simple marketing or informational website. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.
-      p <a class="btn btn-primary btn-lg" href="#" role="button">Learn more &raquo;</a>
+      h1 Welcome to 
+        span.text-primary Emojr
+      p "There must be a brain%@^# web framework out there that would be a better choice." -MFS
+      p <a class="btn btn-primary btn-lg" href="/e/%F0%9F%8C%B5" role="button">Suck It Mike's Beliefs <span class="emj">&#x1F335;</span></a>
+  div.container
+    ul(class="emoji-list row")
+      each emoji in emojis
+        li
+          a(class="emj" href="/e/#{emoji.Url}" title="#{emoji.Description}") &#x#{emoji.Unicode};

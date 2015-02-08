@@ -5,9 +5,21 @@ var favicon = require('static-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
+
+//Connect to MongoDB
+var db = mongoose.connect('mongodb://localhost/emodb', function(err, res) {
+  if (err) {
+    console.log('ERROR connecting to mongodb://localhost/emodb. ' + err);
+  }
+  else {
+      console.log('Succeed connected to mongodb://localhost/emodb')
+  }
+});
 
 var routes = require('./routes');
 var users = require('./routes/user');
+var emoji = require('./routes/emojiController');
 
 var app = express();
 
@@ -25,6 +37,7 @@ app.use(app.router);
 
 app.get('/', routes.index);
 app.get('/users', users.list);
+app.get('/e/:symbol', emoji.main);
 
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {
