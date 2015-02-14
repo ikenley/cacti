@@ -6,6 +6,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+var passport = require('passport');
 
 //Connect to MongoDB
 var db = mongoose.connect('mongodb://localhost/emodb', function(err, res) {
@@ -13,13 +14,16 @@ var db = mongoose.connect('mongodb://localhost/emodb', function(err, res) {
     console.log('ERROR connecting to mongodb://localhost/emodb. ' + err);
   }
   else {
-      console.log('Succeed connected to mongodb://localhost/emodb')
+      console.log('Connected to DB');
   }
 });
 
 var routes = require('./routes');
 var users = require('./routes/user');
 var emoji = require('./routes/emojiController');
+
+//Configure passport
+require('./config/passport.js')(passport);
 
 var app = express();
 
@@ -33,10 +37,28 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.session({ secret: '20xd6' }));
+// Remember Me middleware
+app.use( function (req, res, next) {
+    if ( req.method == 'POST' && req.url == '/login' ) {
+        if ( req.body.rememberme ) {
+            req.session.cookie.maxAge = 2592000000; // 30*24*60*60*1000 Rememeber 'me' for 30 days
+        } else {
+            req.session.cookie.expires = false;
+        }
+    }
+    next();
+});
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(app.router);
 
 app.get('/', routes.index);
-app.get('/users', users.list);
+app.get('/login', users.login);
+app.post('/login', users.authenticate(passport));
+app.post('/signup', users.signup(passport));
+app.get('/logout', users.logout);
+app.get('/e', emoji.main);
 app.get('/e/:symbol', emoji.main);
 
 /// catch 404 and forwarding to error handler

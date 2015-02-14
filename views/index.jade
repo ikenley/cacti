@@ -1,23 +1,6 @@
 extends layout
 
 block content
-  //- Navbar
-  nav(class="navbar navbar-inverse navbar-fixed-top" role="navigation")
-    div.container
-      div.navbar-header
-        button(type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar")
-          span.sr-only Toggle navigation
-          span.icon-bar
-          span.icon-bar
-          span.icon-bar
-          a(class="navbar-brand" href="#") Project name TODO
-      div#navbar(class="navbar-collapse collapse")
-        form(class="navbar-form navbar-right" role="form")
-          div.form-group
-            input(type="text" placeholder="Email" class="form-control")
-          div.form-group
-            input(type="password" placeholder="Password" class="form-control")
-          button(type="submit" class="btn btn-success") Sign in
   //- Main jumbotron for a primary marketing message or call to action
   div.jumbotron
     div.container
@@ -26,6 +9,16 @@ block content
       p "There must be a brain%@^# web framework out there that would be a better choice." -MFS
       p <a class="btn btn-primary btn-lg" href="/e/%F0%9F%8C%B5" role="button">Suck It Mike's Beliefs <span class="emj">&#x1F335;</span></a>
   div.container
+    //- Search bar
+    div.row
+      div(class="col-sm-8 col-sm-offset-2")
+        form(class="" role="search" method="GET" action="/e")
+          div.input-group.input-group-lg
+            input(type="text" name="symbol" class="form-control" placeholder="Search emoji...")
+            span.input-group-btn
+              button(class="btn btn-default" type="button")
+                span(class="glyphicon glyphicon-search")
+    //- Emoji list
     ul(class="emoji-list row")
       each emoji in emojis
         li

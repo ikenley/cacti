@@ -7,8 +7,8 @@ var Emoji = require('../models/Emoji.js');
 
 exports.main = function(req, res) {
       //TODO Error handling
-      var pageConfig = { title: 'Emoji Detail' };
-      var symbol = req.param('symbol');
+      var pageConfig = { title: 'Emoji Detail', user: req.user };
+      var symbol = req.query.symbol == null ? req.param('symbol') : req.query.symbol;
       console.log('symbol: ' + symbol);
       var unicode = unicodeToString(symbol);
       console.log('unicode: ' + unicode);

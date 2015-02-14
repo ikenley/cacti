@@ -6,7 +6,7 @@ exports.index = function(req, res) {
     if (err) {
       res.send(err);
     }
-    pageConfig = { title: 'Emojr', emojis: emos };
+    pageConfig = { title: 'Emojr', emojis: emos, user: req.user };
     res.render('index', pageConfig);
   });
 
