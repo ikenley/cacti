@@ -8,14 +8,12 @@ var Emoji = require('../models/Emoji');
 var Comment = require('../models/comment_model');
 
 exports.main = function(req, res) {
-      var pageConfig = { title: 'Emoji Detail', user: req.user };
-      var symbol = req.query.symbol == null ? req.params.symbol : req.query.symbol;
-      console.log('symbol: ' + symbol);
-      var unicode = unicodeToString(symbol);
-      console.log('unicode: ' + unicode);
-      var emo = Emoji.findOne({Unicode: unicode}, function(err, emo) {
+    var pageConfig = { title: 'Emoji Detail', user: req.user };
+    var symbol = req.query.symbol == null ? req.params.symbol : req.query.symbol;
+    console.log('symbol: ' + symbol);
+    var renderDetail = function(err, emo) {
         if (err) {
-          res.send(err);
+            res.send(err);
         }
         //If emoji not found, redirect to "404" emoji
         if (!emo) {
@@ -26,7 +24,18 @@ exports.main = function(req, res) {
         pageConfig.emoji = emo;
         pageConfig.emoji.Symbol = symbol;
         res.render('detail', pageConfig);
-      });
+    };
+    //If symbol is unicode, search for matching unicode char
+    if (symbol.length <= 2) {
+        var unicode = unicodeToString(symbol);
+        console.log('unicode: ' + unicode);
+        Emoji.findOne({Unicode: unicode}, renderDetail);
+    }
+    //Else search description
+    else {
+        var regX = new RegExp('.*' + symbol + '.*', 'i');
+        Emoji.findOne({Description: regX}, renderDetail);
+    }
 };
 
 /*getComments(): Get all comments for a given Emoji */
