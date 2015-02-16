@@ -1,12 +1,16 @@
 
 
 /* ==========================================================================
-   Author's custom styles
+   Emojr custom style
    ========================================================================== */
 
  body {
    padding-top: 50px;
  }
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none !important;
+}
 
  /*==========================================================================
     Index
@@ -77,4 +81,13 @@
   .emj {
     font-family: "EmojiSymbols";
     line-height: 1;
+  }
+
+  #newComment .alert {
+      padding:5px;
+  }
+
+  #listComment
+  {
+      margin:30px 0px;
   }

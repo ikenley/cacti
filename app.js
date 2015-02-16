@@ -9,14 +9,16 @@ var mongoose = require('mongoose');
 var passport = require('passport');
 
 //Connect to MongoDB
-var db = mongoose.connect('mongodb://localhost/emodb', function(err, res) {
-  if (err) {
-    console.log('ERROR connecting to mongodb://localhost/emodb. ' + err);
-  }
-  else {
-      console.log('Connected to DB');
-  }
-});
+var db = mongoose.connect('mongodb://localhost/emodb',
+    function(err, res) {
+        if (err) {
+        console.log('ERROR connecting to mongodb://localhost/emodb. ' + err);
+        }
+        else {
+          console.log('Connected to DB');
+        }
+    }
+);
 
 var routes = require('./routes');
 var users = require('./routes/user');
@@ -58,8 +60,10 @@ app.get('/login', users.login);
 app.post('/login', users.authenticate(passport));
 app.post('/signup', users.signup(passport));
 app.get('/logout', users.logout);
-app.get('/e', emoji.main);
+app.get('/comment/get/:emojiId', emoji.getComments);
+app.post('/comment/add/:emojiId', emoji.addComment);
 app.get('/e/:symbol', emoji.main);
+app.get('/e', emoji.main);
 
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {
@@ -88,6 +92,11 @@ app.use(function(err, req, res, next) {
         message: err.message,
         error: {}
     });
+});
+
+app.set('port', process.env.PORT || 8080);
+var server = app.listen(app.get('port'), function() {
+    console.log('Express server listening on port ' + server.address().port);
 });
 
 

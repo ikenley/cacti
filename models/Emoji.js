@@ -6,7 +6,7 @@ DB intermediary layer for Emoji Collection
 var mongoose = require('mongoose');
 
 var emojiSchema = new mongoose.Schema({
-  Unicode : { type : String, required : true },
+  Unicode : { type : String, unique: true, required : true, index: 1 },
   UTF8 : String,
   Url : String,
   Description: String,

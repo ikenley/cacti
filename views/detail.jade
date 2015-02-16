@@ -1,10 +1,31 @@
 extends layout
 
 block content
-  //- Main jumbotron for a primary marketing message or call to action
-  div.jumbotron
-    div.container
-      h1 Details for: 
-        a(class="emj" href="/e/#{emoji.Url}" title="U+#{emoji.Unicode}") &#x#{emoji.Unicode};
-      p "#{emoji.Description}"
-  
+  div(ng-app="detailApp" ng-controller="DetailController")
+    //- Main jumbotron for a primary marketing message or call to action
+    div.jumbotron
+      div.container
+        h1 Details for:
+          a(class="emj" href="/e/#{emoji.Url}" title="U+#{emoji.Unicode}") &#x#{emoji.Unicode};
+        p "#{emoji.Description}"
+    div#comment.container
+      if (user)
+        div#newComment
+          form(name="formComment" class="form-horizontal" ng-submit="addComment()")
+            div.form-group
+              div.col-sm-8
+                textarea(name="txtComment" class="form-control" rows="3" ng-model="desc" ng-maxlength="140")
+                div(class="alert alert-danger" ng-cloak ng-show="formComment.txtComment.$error.maxlength") Max length is 140
+            div.form-group
+              div.col-sm-6
+                button(type="submit" class="btn btn-primary") Save
+      ul#listComment.list-group
+        li(class="li-comment list-group-item" ng-cloak ng-repeat="comment in comments")
+          p.list-group-item-heading {{comment.desc}}
+          p.list-group-item-text.text-muted {{comment.postedBy}} - {{comment.posted | date:'short'}}
+
+    script var pageConfig = { emoji: !{JSON.stringify(emoji)} };
+
+block scripts
+  script(type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.11/angular.min.js")
+  script(type="text/javascript" src="/javascripts/detail_ng.js")
